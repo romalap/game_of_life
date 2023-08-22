@@ -50,8 +50,7 @@ def get_neighbours(map_: List[List[bool]], coordinate_row: int, coordinate_colum
                 continue
             if x_pos >= len(map_) or y_pos >= len(map_):
                 continue
-            if map_[x_pos][y_pos] is True:
-                count+=1
+            count+=map_[x_pos][y_pos]
     return count
 
 
@@ -64,14 +63,15 @@ def update_map(old_map: List[List[bool]]) -> List[List[bool]]:
     # return updated/new map
     new_map = old_map.copy()
     for x_coord, row in enumerate(old_map):
-        for y_coord, value in enumerate(row):
-            alive = get_neighbours(old_map, x_coord, y_coord)
-            if alive < 2 or alive > 3:
+        for y_coord, _ in enumerate(row):
+            alive_count = get_neighbours(old_map, x_coord, y_coord)
+            if alive_count == 3:
+                new_map[x_coord][y_coord] = True
+            elif alive_count == 2 and old_map[x_coord][y_coord]:
+                new_map[x_coord][y_coord] = True
+            else:
                 new_map[x_coord][y_coord] = False
-            if alive == 3:
-                new_map[x_coord][y_coord] = True
-            if alive == 2 and old_map[x_coord][y_coord] is True:
-                new_map[x_coord][y_coord] = True
+
     show_map(new_map)
     return new_map
 
