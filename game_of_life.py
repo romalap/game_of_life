@@ -82,8 +82,8 @@ def recursive(times, map_):
     if times == 1:
         update_map(map_)
     else:
-        update_map(map_)
-        recursive(times - 1, map_)
+        map__ = update_map(map_)
+        recursive(times - 1, map__)
 
 
 if __name__ == '__main__':
