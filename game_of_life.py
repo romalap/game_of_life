@@ -1,28 +1,15 @@
-from pprint import pprint
 from random import choice
 from typing import List
+import matplotlib.pyplot as plt
 
 # constant
-GENERATIONS = 10
+GENERATIONS = 100
+SIZE = 50
 
+fig, ax = plt.subplots()
 
-def create_map(size: int = 5) -> List[List[bool]]:
-    """Create a 2d map for given size
-    [
-    [1,1,1],
-    [1,1,1],
-    [1,1,1]
-    ]
-
-    """
-    # map_ = []
-    # for _ in range(size):
-    #     row = []
-    #     for _ in range(size):
-    #         row.append(choice([False, True]))
-    #     map_.append(row)
-    #
-    # return map_
+def create_map(size: int = SIZE) -> List[List[bool]]:
+    """ Create a 2d map for given size """
     return [[choice([False, True]) for _ in range(size)] for _ in range(size)]
 
 
@@ -30,8 +17,12 @@ def show_map(map_: List[List[bool]]):
     """ Show the map in a readable form.
     :param map_: Array to show.
     """
-    # matplotlib library.. google how to do 2d animation.
-    pprint(map_)
+    plt.ion()
+    ax.clear()
+    ax.imshow(map_, cmap='viridis')
+    plt.draw()
+    plt.pause(0.5)
+    plt.ioff()
 
 
 def get_neighbours(map_: List[List[bool]], coordinate_row: int, coordinate_column: int) -> int:
@@ -56,11 +47,6 @@ def get_neighbours(map_: List[List[bool]], coordinate_row: int, coordinate_colum
 
 def update_map(old_map: List[List[bool]]) -> List[List[bool]]:
     """ Updates given map to next generation """
-    # HOMEWORK
-    # we iterate over whole map
-    # check number of alive neighbours
-    # decision: live or die
-    # return updated/new map
     new_map = old_map.copy()
     for x_coord, row in enumerate(old_map):
         for y_coord, _ in enumerate(row):
@@ -71,23 +57,13 @@ def update_map(old_map: List[List[bool]]) -> List[List[bool]]:
                 new_map[x_coord][y_coord] = True
             else:
                 new_map[x_coord][y_coord] = False
-
-    show_map(new_map)
     return new_map
-
-
-def recursive(times, map_):
-    """ 
-    """
-    if times == 1:
-        update_map(map_)
-    else:
-        map__ = update_map(map_)
-        recursive(times - 1, map__)
 
 
 if __name__ == '__main__':
     current_map = create_map()
-    show_map(current_map)
-    sec_map = update_map(current_map)
-    #recursive(GENERATIONS, sec_map)
+    for iteration in range(GENERATIONS):
+        print("iteration = ", iteration)
+        current_map = update_map(current_map)
+        show_map(current_map)
+    plt.show()
